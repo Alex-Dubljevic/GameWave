@@ -1,0 +1,3 @@
+In Civilization V, the player leads a civilization from prehistoric times into the future on a procedurally 
+generated map, attempting to achieve one of a number of different victory conditions through research, 
+exploration, diplomacy, expansion, economic development, government and military conquest.

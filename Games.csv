@@ -1,17 +1,66 @@
-Title,Genres,Rating,ID,Image
-Elden Ring,Dark Fantasy;Action;RPG;Open World,4,E12R345,eldenring.png
-Assassin's Creed,Action;Adventure;Stealth;Open World;Singleplayer,3.7,TY54NY4,acfinal.png
-Destiny 2,MMO;FPS;Adventure;RPG,4.2,D90RM41,destiny2final.png
-CS2,FPS;Tactical Shooter,4.1,GR7LX43,cs2final.png
-Forza Horizon 5,Racing;Open World,3.6,KP3ZU8C,forzahorizon5final.png
-The Witcher 3,Open World;RPG;Action;Singleplayer,4.9,TR6M8XZ,thewitcher3final.png
-Fifa 23,0,0,Y187MOY,0
-Ghost of Tsushima,0,0,IYJYK3B,0
-GTA5,0,0,0Q7JMFH,0
-Apex Legends,0,0,9PH12B5,0
-Sea of Thieves,0,0,H0LE2PN,0
-The Legend of Zelda,0,0,LJ2TO5T,0
-Rocket League,0,0,LM5DLO7,0
-Call of Duty,0,0,K8VY7I0,0
-DOOM,0,0,PI05NXV,0
-God of War,0,0,UTKLBIH,0
+Title,Genres,Rating,ID,Image,Description
+Elden Ring,Action;RPG;Open World;Singleplayer,4.2,E12R345,eldenfinal.png,Elden Ring.txt
+Assassin's Creed,Action;Adventure;Stealth;Open World;Singleplayer,3.9,TY54NY4,acfinal.png,Assassin's Creed.txt
+Destiny 2,MMO;Shooter;Adventure;RPG;Multiplayer,4.1,D90RM41,destiny2final.png,Destiny 2.txt
+CS2,Shooter;Multiplayer,3.6,GR7LX43,cs2final.png,CS2.txt
+Forza Horizon 5,Racing;Open World;Multiplayer,2.9,KP3ZU8C,forzahorizon5final.png,Forza Horizon 5.txt
+The Witcher 3,Open World;RPG;Action;Singleplayer,3.0,TR6M8XZ,thewitcher3final.png,The Witcher 3.txt
+Fifa 23,Sports;Casual;Simulation;Multiplayer,0.4,Y187MOY,fifa23final.png,Fifa 23.txt
+Ghost of Tsushima,RPG;Stealth;Action;Adventure;Singleplayer,4.0,IYJYK3B,ghostoftsushimafinal.png,Ghost of Tsushima.txt
+GTA5,Open World;Action;Shooter;Singleplayer,3.5,0Q7JMFH,gta5final.png,GTA5.txt
+Apex Legends,Shooter;Battle Royale;Multiplayer,3.1,9PH12B5,apexlegends.png,Apex Legends.txt
+Sea of Thieves,Open World;Adventure;Multiplayer,4.1,H0L32PN,seaofthievesfinal.png,Sea of Thieves.txt
+The Legend of Zelda,Adventure;Action;RPG;Puzzle;Singleplayer,5.0,LJ2TO5T,thelegendofzeldafinal.png,The Legend of Zelda.txt
+Rocket League,Sports;Racing;Multiplayer,2.8,LM5DLO7,rocketleaguefinal.png,Rocket League.txt
+Call of Duty,Shooter;Multiplayer,2.8,K8VY7I0,callofdutyfinal.png,Call of Duty.txt
+DOOM,Shooter;Action;Singleplayer,3.8,PI05NXV,doomfinal.png,DOOM.txt
+God of War,RPG;Action;Hack and Slash;Singleplayer,4.9,UT3L8IH,godofwarfinal.png,God of War.txt
+Final Fantasy 7,RPG;Adventure;Turn-based;Singleplayer,3.6,F7E89GT,finalfantasy7final.png,Final Fantasy 7.txt
+Super Mario Odyssey,Platform;Adventure;Singleplayer,4.5,SM57Q88,supermarioodysseyfinal.png,Super Mario Odyssey.txt
+Red Dead Redemption 2,Action;Open World;Shooter;Singleplayer,2.6,R45TH50,rdr2final.png,Red Dead Redemption 2.txt
+Resident Evil 2,Survival;Horror;Action;Puzzle;Singleplayer,4.0,RE2PH9L,residentevil2.png,Resident Evil 2.txt
+Spider-Man,Action;Adventure;Open World;Singleplayer,3.8,M3R6V9L,spidermanfinal.png,Spider-Man.txt
+Civilization V,Strategy;Turn-based;Simulation;Singleplayer,5.0,CR56T2H,civilizationvfinal.png,Civilization V.txt
+Anthem,RPG;Shooter;Multiplayer,0.6,VW5Z11G,anthem.png,Anthem.txt
+Stumble Guys,Platform;Indie;Multiplayer,2.4,3FI2CZX,stumbleguysfinal.png,Stumble Guys.txt
+Mortal Kombat 11,Fighting;Adventure;Multiplayer,3.5,MK41D6I,mortalkombat.png,Mortal Kombat 11.txt
+The Sims 4,Simulation;Casual;Singleplayer,4.2,P89BH32,thesims4final.png,The Sims 4.txt
+Tetris,Strategy;Puzzle;Singleplayer,1.9,S1G55XA,tetrisfinal.png,Tetris.txt
+Need for Speed,Racing;Open World;Simulation;Multiplayer,3.2,N4S103X,needforspeedfinal.png,Need for Speed.txt
+Farming Simulator,Simulation;Strategy;Singleplayer,1.4,6D5ZA02,farmingsimulatorfinal.png,Farming Simulator.txt
+PAC-Man,Action;Puzzle;Singleplayer,2.4,UL47J09,pacmanfinal.png,PAC-Man.txt
+Dragon Ball FighterZ,Fighting;Adventure;Multiplayer,2.9,25DBF93L,dragonballfighterzfinal.png,Dragon Ball FighterZ.txt
+Minecraft,Survival;Open World;Indie;Multiplayer,4.2,MC33G4CS,minecraftfinal.png,Minecraft.txt
+Earthworm Jim,Platform;Shooter;Singleplayer,5.0,RF21WRM,earthwormjimfinal.png,Earthworm Jim.txt
+Sifu,Fighting;Indie;Singleplayer,3.8,4SPHU08,sifufinal.png,Sifu.txt
+The Last of Us,Stealth;Survival;Horror;Singleplayer,4.6,EL303Y4,thelastofusfinal.png,The Last of Us.txt
+Fortnite,Battle Royale;Shooter;Multiplayer,1.5,0FN32UY,fortnitefinal.png,Fortnite.txt
+Portal,Puzzle;Shooter;Singleplayer,3.4,ON18P0J,portalfinal.png,Portal.txt
+Hogwarts Legacy,Open World;Action;RPG;Puzzle;Singleplayer,4.1,H4W1F3U,hogwartslegacyfinal.png,Hogwarts Legacy.txt
+Batman: Arkham City,Action;Adventure;Stealth;Singleplayer,4.6,R0B1N66,batmanac.png,Batman: Arkham City.txt
+Persona 5,RPG;Simulation;Turn-based;Singleplayer,3.1,P5RS09D,persona5.png,Persona 5.txt
+Cyberpunk 2077,RPG;Shooter;Adventure;Singleplayer,1.4,8KF30IQ,cyberpunk2077final.png,Cyberpunk 2077.txt
+Dark Souls,Action;RPG;Horror;Singleplayer,2.3,53DS90P,darksouls.png,Dark Souls.txt
+Uncharted 4,Adventure;Shooter;Puzzle;Singleplayer,3.9,AJ85MY2,uncharted4final.png,Uncharted 4.txt
+Microsoft Flight Simulator,Simulation;Open World;Singleplayer,0.4,MSF33E2,microsoftflightsimulatorfinal.png,Microsoft Flight Simulator.txt
+Miami Crime Simulator,Open World;Action;Shooter;Multiplayer,0.2,6C78Y4S,miamicrimesimulatorfinal.png,Miami Crime Simulator.txt
+Bloodborne,Action;RPG;Horror;Singleplayer,4.6,UI985T3,bloodbornefinal.png,Bloodborne.txt
+NBA 2K23,Sports;Simulation;Multiplayer,2.3,24N8A0J,nba2k23final.png,NBA 2K23.txt
+UFC 4,Sports;Fighting;Simulation;Multiplayer,1.1,U09FC38,ufc4final.png,UFC 4.txt
+Bubsy,Platform;Adventure;Singleplayer,2.0,7BI4R2H,bubsy.png,Bubsy.txt
+Kingdom Hearts,Action;RPG;Adventure;Singleplayer,1.3,ZF2OA39,kingdomhearts.png,Kingdom Hearts.txt
+Rise of Kingdoms,Strategy;Casual;Multiplayer,0.2,1BG98KB,riseofkingdoms.png,Rise of Kingdoms.txt
+Clash of Clans,Strategy;Casual;Multiplayer,2.9,YV1G47E,clashofclans.png,Clash of Clans.txt
+Pokemon Scarlet,RPG;Turn-based;Adventure;Singleplayer,0.6,R30D590,pokemonscarlet.png,Pokemon Scarlet.txt
+Pokemon Violet,RPG;Turn-based;Adventure;Singleplayer,0.7,4PS5X2A,pokemonviolet.png,Pokemon Violet.txt
+Minecraft Story Mode,Adventure;Indie;Survival;Singleplayer,1.8,L3D182W,minecraftstorymode.png,Minecraft Story Mode.txt
+Asura's Wrath,Action;Hack and Slash;Singleplayer,2.3,A3WT4BZ,asuraswrath.png,Asura's Wrath.txt
+Hades,Action;Roguelike;Indie;Singleplayer,4.4,68HP3T4,hades.png,Hades.txt
+Mario Kart 8,Racing;Action;Multiplayer,4.2,K76XC43,mariokart8final.png,Mario Kart 8.txt
+Lego Star Wars,Platform;Action;Hack and Slash;Multiplayer,3.4,GV51C0J,legostarwars.png,Lego Star Wars.txt
+Celeste,Platform;Indie;Singleplayer,4.8,5CL23FL,celeste.png,Celeste.txt
+Animal Crossing,Simulation;Casual;Singleplayer,1.9,78RU2GB,animalcrossing.png,Animal Crossing.txt
+Deus Ex,Shooter;Stealth;Action;Singleplayer,3.8,D0A24E1,deus_ex.png,Deus Ex.txt
+Detroit Become Human,RPG;Simulation;Singleplayer,2.5,PB5Y71M,detroitbecomehumanfinal.png,Detroit Become Human.txt
+MLB The Show 23,Sports;Simulation;Multiplayer,0.3,UC58ES4,mlbtheshow23final.png,MLB The Show 23.txt
+Devil May Cry 5,Hack and Slash;Action;Adventure;Singleplayer,5.0,D5MC33F,dmc5.png,Devil May Cry 5.txt

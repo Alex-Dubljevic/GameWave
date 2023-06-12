@@ -7,8 +7,10 @@ Programmed by: Alex D., Aleks G., Maksim G., Ilya R., and Kaan U.
 Last modified: Apr. 27th, 2023
 */
 
+//imports necessary classes
 import java.util.*;
 import java.io.*;
+import java.util.Base64;
 
 public class Game {
   private String title;
@@ -16,6 +18,7 @@ public class Game {
   private ArrayList<String> genres;
   private String ID;
   private String image;
+  private String description;
 
   /**
   *Constructor sets fields for Game
@@ -24,21 +27,22 @@ public class Game {
   *@param gameID is the ID of the game
   *@param gameImage is the image of the game
   */
-  public Game (String gameTitle, ArrayList<String> gameGenres, float gameRating, String gameID, String gameImage){
+  public Game (String gameTitle, ArrayList<String> gameGenres, float gameRating, String gameID, String gameImage, String gameDescription){
     
     this.title = gameTitle;
     this.genres = gameGenres;
     this.rating = gameRating;
     this.ID = gameID;
     this.image = gameImage;
+    this.description = gameDescription;
     
   }
-  
-    /**
-     * Method dealing with title 
-     * 
-     * @return title
-     */
+
+	/**
+  *Method dealing with title 
+  * 
+  * @return title
+  */
   
   public String getTitle() {
 	 return title;
@@ -129,6 +133,14 @@ public class Game {
 	 this.image = image;
   }
 
+  public String getDescription() {
+	 return description;
+  }
+
+  public void setDescription(String description) {
+	 this.description = description;
+  }
+
   /**
   This method reads through the CSV file in order to find a game that matches the Users input.
   */
@@ -162,12 +174,15 @@ public class Game {
       this.ID = gameInfoSplit[3];
 
       this.image = gameInfoSplit[4];
+
+      this.description = gameInfoSplit[5];
        
     }
 
 
   /**
   This method prints out all the relevant and necessary information found in the csv file.
+  @param searchedGame
   */
   public void printGameInfo (Game searchedGame) {
     System.out.println(searchedGame.getTitle());
@@ -175,6 +190,31 @@ public class Game {
     System.out.println(searchedGame.getRating());
     System.out.println(searchedGame.getID());
     System.out.println(searchedGame.getImage());
+    System.out.println(searchedGame.getDescription());
+  }
+
+  /**
+  This method gets the json associated w/ selected value, organizing its images, description, and so on.
+  
+  */
+  
+  public String getJSON () throws IOException {
+    String imgPath = "imgs/" + this.image;
+    System.out.println(imgPath);
+    File imageFile = new File(String.valueOf(imgPath));
+    FileInputStream imageStream = new FileInputStream(imageFile);
+    byte[] imageBytes = imageStream.readAllBytes();
+    imageStream.close();
+    String image = Base64.getEncoder().encodeToString(imageBytes);
+    String descPath = "desc/" + this.description;
+    System.out.println(descPath);
+    File descriptionFile = new File(String.valueOf(descPath));
+    FileInputStream descriptionStream = new FileInputStream(descriptionFile);
+    byte[] descriptionBytes = descriptionStream.readAllBytes();
+    descriptionStream.close();
+    String description = Base64.getEncoder().encodeToString(descriptionBytes);
+    return "{\"game\": \"" + this.title + "\", \"genre\": \"" + String.valueOf(this.genres) + "\", \"rating\": \"" + String.valueOf(this.rating) + "\", \"image\": \"" + image + "\", \"description\": \"" + description + "\"}";
+
   }
   
 }

@@ -1,5 +1,15 @@
-//Server.java written by Aleksandar Gojovic
-// implements game.java written by Maksim Grujic
+
+/**
+
+  Server.java
+  This class deals with the server based off of the Games.java class.
+
+  Programmed by: Alex D., Aleks G., Maksim G., Kaan  U., and Ilya R.
+  Date Created: Feb. 22, 2023
+  Date Modified: June 8, 2023
+
+*/
+//imports necessary external classe for the class
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
@@ -7,20 +17,44 @@ import java.util.regex.*;
 import java.security.*;
 import com.sun.net.httpserver.*;
 import java.util.logging.*;
-import java.util.Base64;
+import java.util.UUID;
+import java.util.HashMap;
 
 public class Server {
   private static final Logger logger = Logger.getLogger(Main.class.getName()); // start logger service
+  private static final HashMap<String, String> sessionData = new HashMap<>(); // start sessionData hashmap which manages logged in users
+  static pgordr pgordr = new pgordr(); //
+  // initialize page order manager, this manager calulates the page order for
+  // different users
+  // page order manager will manage the order in which the games appear based on
+  // user
 
-  public static void start() throws IOException {
+  public void start() throws IOException {
     // create HttpServer object
     HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 80), 0);
 
     // create request handler for all endpoints
+
+    // endpoint for logging in 
     server.createContext("/login", new RequestHandler());
+
+    // endpoint for dashboard (content delivery)
     server.createContext("/dashboard", new RequestHandler());
+
+    // endpoint for signing up 
     server.createContext("/signup", new RequestHandler());
+
+    // endpoint for initialization (tells the client the corresponding name for each ID)
     server.createContext("/init", new RequestHandler());
+
+    // endpoint for page order (tells the client how to order the dashabord)
+    server.createContext("/pgordr", new RequestHandler());
+
+    // endpoint to capture survey data 
+    server.createContext("/survey", new RequestHandler());
+
+    // endpoint to capture reviews
+    server.createContext("/reviews", new RequestHandler());
 
     // create service executor
     ExecutorService executor = Executors.newFixedThreadPool(10);
@@ -34,11 +68,12 @@ public class Server {
     public void handle(HttpExchange exchange) throws IOException {
       String path = exchange.getRequestURI().getPath();
       Validator validate = new Validator();
+      String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
+      Headers headers = exchange.getResponseHeaders();
       logger.info(exchange.getRequestMethod() + " on " + path);
       switch (path) {
         case "/login":
           // code for login case//////////////////////////////////////////////
-          String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
           if ("POST".equals(exchange.getRequestMethod())) {
             String requestBody = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), "utf-8"))
                 .readLine();
@@ -63,25 +98,21 @@ public class Server {
 
             // send response containing "valid" header with value 1 or 0 depending on
             // hQueryCheck
-            Headers loginHeaders = exchange.getResponseHeaders();
             OutputStream responseBody = exchange.getResponseBody();
             String response = "";
             if (hQueryCheck) {
               logger.info("Login success;" + ip + ";username:" + username + ";password:" + password);
-              loginHeaders.set("validity", "1");
+              headers.set("validity", "1");
               response = response + "Login succesful!\n";
 
-              // session ID generation
-              // HttpSession session =
-              // exchange.getHttpContext().getServer().createContext("/").getHttpHandler().getSession(exchange);
-              // // create session obj
-              // String sessionId = UUID.randomUUID().toString(); // generate session
-              // session.setAttribute("username", username); // store the session object
-              // session.setMaxInactiveInterval(30 * 60); // set session expiry
+              String sessionId = UUID.randomUUID().toString();
+              sessionData.put(sessionId, username);
+              headers.set("Username", username);
+              headers.set("Session-ID", sessionId);
 
             } else {
               logger.info("Sending invalid login to " + ip); // debug
-              loginHeaders.set("validity", "0");
+              headers.set("validity", "0");
               response = response + "Username or Password incorrect\n";
             }
             exchange.sendResponseHeaders(200, response.length());
@@ -92,7 +123,6 @@ public class Server {
           } else {
             // method not supported (any method but POST)
             logger.info(ip + " attempt !POST on /login");
-            Headers loginHeaders = exchange.getResponseHeaders();
             OutputStream responseBody = exchange.getResponseBody();
             String response = "Method not supported\n";
             exchange.sendResponseHeaders(200, response.length());
@@ -104,8 +134,8 @@ public class Server {
           }
           // END OF LOGIN ENDPOINT
           // BEGINNING OF SIGNUP ENGPOINT
+          break;
         case "/signup":
-          ip = exchange.getRemoteAddress().getAddress().getHostAddress();
           if ("POST".equals(exchange.getRequestMethod())) {
             String requestBody = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), "utf-8"))
                 .readLine();
@@ -120,7 +150,6 @@ public class Server {
             }
             HashQuery dbAddition = new HashQuery("userdb.csv");
             String response = "";
-            Headers loginHeaders = exchange.getResponseHeaders();
             OutputStream responseBody = exchange.getResponseBody();
             try {
               if (validate.validate(username, false)) {
@@ -128,18 +157,18 @@ public class Server {
                   boolean additionSuccess = dbAddition.add(username, password);
                   if (additionSuccess) {
                     logger.info("Added " + username + " and " + password + " to DB");
-                    loginHeaders.set("validity", "1");
+                    headers.set("validity", "1");
                     response = response + "Sign Up Succesful\n";
                   } else {
-                    loginHeaders.set("validity", "0");
+                    headers.set("validity", "0");
                     response = response + "Sign up Failure:\n";
                   }
                 } else {
-                  loginHeaders.set("validity", "0");
+                  headers.set("validity", "0");
                   response = response + "Sign Up Failure:password\n";
                 }
               } else {
-                loginHeaders.set("validity", "0");
+                headers.set("validity", "0");
                 response = response + "Sign Up Failure:username2\n";
               }
             } catch (Exception e) {
@@ -154,8 +183,7 @@ public class Server {
           } else {
             // method not supported (any method but POST)
             logger.info(ip + " attempted !POST on /signup");
-            Headers loginHeaders = exchange.getResponseHeaders();
-              
+
             OutputStream responseBody = exchange.getResponseBody();
             String response = "Method not supported\n";
             exchange.sendResponseHeaders(200, response.length());
@@ -166,44 +194,47 @@ public class Server {
             responseBody.close();
           }
           HashQuery hasher = new HashQuery("userdb.csv");
+          break;
           // BEGINNING OF DASHBOARD ENDPOINT
         case "/dashboard":
-          ip = exchange.getRemoteAddress().getAddress().getHostAddress();
           if ("GET".equals(exchange.getRequestMethod())) {
             // handle GET request
             logger.info(ip + " attempting GET on /dashboard");
-            Headers dashboardHeaders = exchange.getResponseHeaders();
-            OutputStream responseBody = exchange.getResponseBody();
-            String[] queryArgs = exchange.getRequestURI().getQuery().split("=");
             String response = "";
-            if (queryArgs[0].equals("inputID")) {
-              String inputID = queryArgs[1];
-              System.out.println(inputID);
-              Game searchedGame = new Game(inputID);
-              String imgPath = "imgs/" + searchedGame.getImage();
-              System.out.println(imgPath);
-              File imageFile = new File(String.valueOf(imgPath));
-              FileInputStream imageStream = new FileInputStream(imageFile);
-              byte[] imageBytes = imageStream.readAllBytes();
-              imageStream.close();
-              String image = Base64.getEncoder().encodeToString(imageBytes);
-              response = "{\"game\": \"" + searchedGame.getTitle() + "\", \"genre\": \""
-                  + String.valueOf(searchedGame.getGenres()) + "\", \"rating\": \""
-                  + String.valueOf(searchedGame.getRating()) + "\", \"image\": \"" + image + "\"}";
+            String sessionId = exchange.getRequestHeaders().getFirst("Session-ID");
+            String username = exchange.getRequestHeaders().getFirst("Username");
+            OutputStream responseBody = exchange.getResponseBody();
+
+            if (true /*sessionData.containsKey(sessionId) && sessionData.get(sessionId).equals(username)*/) {
+              logger.info(ip + " attempting GET on /dashboard: session valid");
+              String[] queryArgs = exchange.getRequestURI().getQuery().split("=");
+              if (queryArgs[0].equals("inputID")) {
+                String inputID = queryArgs[1];
+                Game searchedGame = new Game(inputID);
+                response = searchedGame.getJSON();
+              } else {
+                logger.info("Game initialization failed");
+                response = "No Game Found";
+              }
+              headers.set("Content-Type", "application/json"); // all professional
+              exchange.sendResponseHeaders(200, response.length()); // 200 OK
+              responseBody.write(response.getBytes()); // write response
+              responseBody.flush();
+              logger.info("JSON data sent to " + ip);
+              responseBody.close(); // finish writing
             } else {
-              logger.info("Game initialization failed");
-              response = "No Game Found";
+              // request unsuccesful
+              response = "Session expired, please login\n";
+              responseBody = exchange.getResponseBody();
+              exchange.sendResponseHeaders(200, response.length());
+              responseBody.write(response.getBytes());
+              responseBody.flush();
+              logger.info("Session expiry sent to " + ip);
+              responseBody.close();
             }
-            dashboardHeaders.set("Content-Type", "application/json"); // all professional
-            exchange.sendResponseHeaders(200, response.length()); // 200 OK
-            responseBody.write(response.getBytes()); // write response
-            responseBody.flush();
-            logger.info("JSON data sent to " + ip);
-            responseBody.close(); // finish writing
           } else { // handle POST (illegal request)
             logger.info(ip + " attempted illegal method on /dashboard");
             // handle POST request
-            Headers dashboardHeaders = exchange.getResponseHeaders();
             OutputStream responseBody = exchange.getResponseBody();
             String response = "Method not supported\n"; // send back method not supported same as GET for /login
             exchange.sendResponseHeaders(200, response.length()); // 200 OK
@@ -212,15 +243,15 @@ public class Server {
             logger.info("Method not supported sent to " + ip);
             responseBody.close();
           }
+          break;
         case "/init":
-          ip = exchange.getRemoteAddress().getAddress().getHostAddress();
           if ("GET".equals(exchange.getRequestMethod())) {
+            headers.set("Content-Type", "application/json"); // all professional
             logger.info(ip + " attempting GET on /init");
             Parser parser = new Parser();
             String response = "";
             try {
               response = parser.getJsonGameDatabase("Games.csv");
-              System.out.println(response);
             } catch (Exception e) {
               response = "Error, no games found";
             }
@@ -233,7 +264,6 @@ public class Server {
           } else {
             logger.info(ip + " attempted illegal method on /dashboard");
             // handle POST request
-            Headers dashboardHeaders = exchange.getResponseHeaders();
             OutputStream responseBody = exchange.getResponseBody();
             String response = "Method not supported\n"; // send back method not supported same as GET for /login
             exchange.sendResponseHeaders(200, response.length()); // 200 OK
@@ -241,6 +271,78 @@ public class Server {
             responseBody.flush();
             logger.info("Method not supported sent to " + ip);
             responseBody.close();
+          }
+          break;
+        case "/pgordr":
+          String response;
+          if ("GET".equals(exchange.getRequestMethod())) {
+            logger.info(ip + " attempting GET on /pgordr");
+            String sessionId = exchange.getRequestHeaders().getFirst("Session-ID");
+            String username = exchange.getRequestHeaders().getFirst("Username");
+            if (true /*sessionData.containsKey(sessionId) && sessionData.get(sessionId).equals(username)*/) {
+              headers.set("Content-Type", "application/json");
+              // request succesful
+              
+               try {
+                response = pgordr.generate(username, "featured.csv", "Games.csv"); // generate page order for user
+               } catch (Exception e) {
+                logger.info("Page could not be generated: " + String.valueOf(e));
+                response = "Page generation error";
+               }
+              OutputStream responseBody = exchange.getResponseBody();
+              exchange.sendResponseHeaders(200, response.length());
+              responseBody.write(response.getBytes());
+              responseBody.flush();
+              logger.info("Page order sent to " + ip);
+              responseBody.close();
+            } else {
+              // request unsuccesful
+              response = "Session expired, please login\n";
+              OutputStream responseBody = exchange.getResponseBody();
+              exchange.sendResponseHeaders(200, response.length());
+              responseBody.write(response.getBytes());
+              responseBody.flush();
+              logger.info("Session expiry sent to " + ip);
+              responseBody.close();
+            }
+          } else {
+            // illegal method
+            logger.info(ip + " attempted illegal method on /pgordr");
+            OutputStream responseBody = exchange.getResponseBody();
+            response = "Method not supported\n"; // send back method not supported
+            exchange.sendResponseHeaders(200, response.length()); // 200 OK
+            responseBody.write(response.getBytes());
+            responseBody.flush();
+            logger.info("Method not supported sent to " + ip);
+            responseBody.close();
+          }
+          break;
+        case "/survey":
+          if ("POST".equals(exchange.getRequestMethod())) {
+            logger.info(ip + " attempting POST on /survey");
+            String username = exchange.getRequestHeaders().getFirst("Username");
+            String[] genres = exchange.getRequestHeaders().getFirst("Genres").split(";");
+          } else {
+            // method not supported
+            logger.info(ip + " attempted illegal method on /pgordr");
+            OutputStream responseBody = exchange.getResponseBody();
+            response = "Method not supported\n"; // send back method not supported
+            exchange.sendResponseHeaders(200, response.length()); // 200 OK
+            responseBody.write(response.getBytes());
+            responseBody.flush();
+            logger.info("Method not supported sent to " + ip);
+            responseBody.close();
+          }
+        case "/reviews":
+          if ("POST".equals(exchange.getRequestMethod())) {
+            String username = exchange.getRequestHeaders().getFirst("Username");
+            String review = exchange.getRequestHeaders().getFirst("Review");
+            String rating = exchange.getRequestHeaders().getFirst("Rating");
+
+            
+            
+          } else {
+            // method not supported
           }
       }
     }

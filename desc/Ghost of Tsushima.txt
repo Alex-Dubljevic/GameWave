@@ -1,0 +1,3 @@
+This is an action game in which players assume the role of a samurai (Jin Sakai) on a quest for vengeance 
+against Mongol invaders in 13th century Japan. Players traverse open-world environments, interact with 
+characters, complete quests (e.g., assassination), and infiltrate enemy strongholds.

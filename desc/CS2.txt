@@ -1,0 +1,3 @@
+Counter-Strike is an objective-based, multiplayer tactical first-person shooter. Two opposing teams—the 
+Terrorists and the Counter Terrorists—compete in game modes to complete objectives, such as securing a location 
+to plant or defuse a bomb and rescuing or guarding hostages.

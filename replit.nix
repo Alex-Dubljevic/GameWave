@@ -1,5 +1,6 @@
 { pkgs }: {
     deps = [
+        pkgs.busybox
         pkgs.nodejs-16_x
         pkgs.wget
         pkgs.graalvm17-ce
