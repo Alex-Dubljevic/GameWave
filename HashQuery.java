@@ -1,14 +1,28 @@
-// hashquery by Aleksandar Gojovic
-// hashes string and manages user database (fetches and adds)
+/**
+
+  HashQuery.java
+  This class hashes the string and handes the database
+  Programmed by: Alex D., Aleks G., Maksim G., Kaan  U., and Ilya R.
+  Date Created: Feb. 22, 2023
+  Date Modified: June 8, 2023
+
+*/
+//imports necessary classes
 import java.security.*;
 import java.util.Base64;
 import java.util.Hashtable;
 import java.io.*;
 import java.util.Scanner;
 
-class HashQuery {
+class HashQuery { //start of hashQuery class
+  
   private Hashtable<String, String> userDB = new Hashtable<>();
   private String database;
+  
+  /*
+  This class organizes the hash query
+  @param database database
+  */
   
   public HashQuery(String database) throws IOException {
 
@@ -22,6 +36,11 @@ class HashQuery {
     }
   }
 
+  /*
+  This class organizes the hash query
+  @param database database
+  */
+  
   private String hash(String plainText) throws NoSuchAlgorithmException {
     // create SHA-512 instance
     MessageDigest md = MessageDigest.getInstance("SHA-512");
@@ -30,7 +49,13 @@ class HashQuery {
     // convert byte array to base64 string and return it 
     return Base64.getEncoder().encodeToString(hashedPassword);
   }
-
+  
+/*
+ This class handles the algorithm and hasquery
+ @param username username
+ @param password password
+ */
+  
   public boolean add(String username, String password) throws NoSuchAlgorithmException, IOException {
     if (userDB.containsKey(username)) {
       return false;
@@ -49,6 +74,13 @@ class HashQuery {
       }
     }
   }
+  
+ /*
+ This class handles the algorithm and hasquery
+ @param username username
+ @param password password
+ */
+  
   public boolean query(String username, String password) throws NoSuchAlgorithmException {
     // initiate return value
     boolean ret = false;

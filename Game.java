@@ -13,6 +13,8 @@ import java.io.*;
 import java.util.Base64;
 
 public class Game {
+
+  //creates private objects
   private String title;
   private float rating;
   private ArrayList<String> genres;

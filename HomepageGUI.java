@@ -50,7 +50,7 @@ public class HomepageGUI extends JFrame implements ActionListener {
       getsJSON();
 
       //Gets the page order as a 2d array from the server
-      String[][] pageOrder = getPgOrder("","");
+      String[][] pageOrder = getPgOrder(sessionID,username);
 
       //Removes any leftover delimiters from the page order 2d array
       for(int i = 0; i < pageOrder.length; i++){
@@ -115,7 +115,8 @@ public class HomepageGUI extends JFrame implements ActionListener {
           //When a game is clicked on it opens that corresponding page for it
             button.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
-                    GameInfoPage game = new GameInfoPage(getGameInfo(pageOrder[0][index], sessionID, username, 0), imageFromID(pageOrder[0][index], sessionID, username), getGameInfo(pageOrder[0][index], sessionID, username, 3), getGameInfo(pageOrder[0][index], sessionID, username, 2));
+                    String[] gameInfo = getGameInfo(pageOrder[0][index], sessionID, username);
+                    GameInfoPage game = new GameInfoPage(gameInfo[0], imageFromID(pageOrder[0][index], sessionID, username), gameInfo[3], gameInfo[2], gameInfo[1], username);
                     game.setVisible(true);
                   
                 }
@@ -137,9 +138,9 @@ public class HomepageGUI extends JFrame implements ActionListener {
             button.setBackground(backgroundColor);
             button.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
-                    //GameInfoPage game = new GameInfoPage(title, imageFromID(pageOrder[1][index], sessionID, username), desc, rat);
-                    //game.setVisible(true);
-                  
+                    String[] gameInfo = getGameInfo(pageOrder[1][index], sessionID, username);
+                    GameInfoPage game = new GameInfoPage(gameInfo[0], imageFromID(pageOrder[1][index], sessionID, username), gameInfo[3], gameInfo[2], gameInfo[1], username);
+                    game.setVisible(true);
                 }
             });
             tablePanel2.add(button);
@@ -158,8 +159,9 @@ public class HomepageGUI extends JFrame implements ActionListener {
             button.setBackground(backgroundColor);
             button.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
-                    //GameInfoPage game = new GameInfoPage(title, imageFromID(pageOrder[2][index], sessionID, username), desc, rat);
-                    //game.setVisible(true);
+                    String[] gameInfo = getGameInfo(pageOrder[2][index], sessionID, username);
+                    GameInfoPage game = new GameInfoPage(gameInfo[0], imageFromID(pageOrder[2][index], sessionID, username), gameInfo[3], gameInfo[2], gameInfo[1], username);
+                    game.setVisible(true);
                 }
             });
             tablePanel3.add(button);
@@ -337,7 +339,7 @@ public class HomepageGUI extends JFrame implements ActionListener {
     return null;
   }
   //Method that gets the rest of the game info like the description, rating etc.
-  public String getGameInfo(String id, String sessionID, String username, int mode){
+  public String[] getGameInfo(String id, String sessionID, String username){
        try {
             // Create the URL object with the endpoint URL and ID
             String endpoint = "http://0.0.0.0:80/dashboard?inputID=" + id;
@@ -366,11 +368,7 @@ public class HomepageGUI extends JFrame implements ActionListener {
                 String jsonResponse = response.toString();
 
                 String[] parse1 = jsonResponse.split("\"", 0);
-/*
-                for(int i = 0; i < parse1.length; i++){
-                  System.out.println(i + " " + parse1[i].length());
-                }
-        */ 
+
 
          //Similar to method for getting the image but just uses different indexes for each list item
                 String title = parse1[3];
@@ -384,28 +382,15 @@ public class HomepageGUI extends JFrame implements ActionListener {
 
                 String decodedDescription = new String(descriptionBytes);
 
-                
-    
          // Disconnect the connection
             connection.disconnect();
-
-
-         //Returns the proper string based on the mode the user selected
-         if(mode == 0){
-           return title;
-         }
-         if(mode == 1){
-           return genres;
-         }
-
-         if(mode == 2){
-           return rating;
-         }
-
-         if(mode == 3){
-           return decodedDescription;
-         }
              
+
+                String[] parse2 = new String[] {title, genres, rating, decodedDescription};
+
+                return parse2;
+
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

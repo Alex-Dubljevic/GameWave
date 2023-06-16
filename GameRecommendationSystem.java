@@ -1,0 +1,65 @@
+/**
+
+  GameRecommendation.java
+  This game handles the recommendation of games for the user
+  Programmed by: Alex D., Aleks G., Maksim G., Kaan  U., and Ilya R.
+  Date Created: Feb. 22, 2023
+  Date Modified: June 8, 2023
+
+*/
+
+//import necessary external classes
+import java.util.*;
+import java.io.*;
+
+public class GameRecommendationSystem{
+
+ /*
+  Organizes the game recommednation system
+  @param database database
+  */
+  
+    public void recommend(String[] myGenres, String username) throws IOException{
+        Map<String, List<String>> gameGenres = new HashMap<>();
+
+        File gameFile = new File("Games.csv"); //initializes csv file
+        Scanner gameReader = new Scanner(gameFile); //initializes scanner
+        gameReader.nextLine();
+        while (gameReader.hasNext()){
+          String gameInfoMerged = gameReader.nextLine();
+          String[] findID = gameInfoMerged.split(",");
+          Game currentGame = new Game(findID[3]);
+          gameGenres.put(currentGame.getTitle(), currentGame.getGenres());
+        }
+        gameReader.close();
+        // Add more games and their genres...
+
+        List<String> userGenres = new ArrayList<>(Arrays.asList(myGenres));
+
+        Map<String, Integer> gameScores = new HashMap<>();
+        for (String genre : userGenres) {
+            for (Map.Entry<String, List<String>> entry : gameGenres.entrySet()) {
+                String game = entry.getKey();
+                List<String> genres = entry.getValue();
+                if (genres.contains(genre)) {
+                    gameScores.put(game, gameScores.getOrDefault(game, 0) + 1);
+                }
+            }
+        }
+
+        List<Map.Entry<String, Integer>> sortedGames = new ArrayList<>(gameScores.entrySet());
+        Collections.sort(sortedGames, (a, b) -> b.getValue().compareTo(a.getValue()));
+
+        List<String> recommendedGames = new ArrayList<>();
+        for (int i = 0; i < Math.min(sortedGames.size(), 16); i++) {
+            recommendedGames.add(sortedGames.get(i).getKey());
+        }
+
+        // Print the recommended games
+        for (String game : recommendedGames) {
+            System.out.println(game);
+        }
+
+        
+    }
+}

@@ -9,19 +9,31 @@
 
 */
 
+//imports necessary classes
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Base64;
 
-class pgordr {
-  public String generate(String username, String featuredDatabase, String gameDatabase) throws Exception {
+class pgordr { // start of pgordr class
+
+  /*
+  generation of the page order
+  @param username username
+  @param featuredDatabase games featured in the database
+  @param gameDatabase complete games of database
+  @return a toString of the json
+  */
+  
+  public String generate(String username, String featuredDatabase, String gameDatabase, String recommendationsDatabase) throws Exception {
     String line = "";
     BufferedReader featured = new BufferedReader(new FileReader(featuredDatabase));
     BufferedReader random = new BufferedReader(new FileReader(gameDatabase));
+    BufferedReader recommended = new BufferedReader(new FileReader(recommendationsDatabase));
     StringBuilder json = new StringBuilder();
-    String[][] games = new String[3][16]; // matrix to store games before JSON 
+    String[][] games = new String[4][16]; // matrix to store games before JSON 
 
 
     json.append("{");
@@ -59,8 +71,18 @@ class pgordr {
     String[] page3Arr = page3generator.generate(gameDatabase);
     games[2] = page3Arr;
 
-    // assemble page 1-3 json using matrix
-    for (int k = 0; k < 3; k++) {
+    // generate page 4 (recommended)
+    while((line = recommended.readLine()) != null) {
+      String[] lineArr = line.split(",");
+      if (lineArr[0].equals(username)) {
+        line = new String(Base64.getDecoder().decode(lineArr[1]), java.nio.charset.StandardCharsets.UTF_8);
+        games[3] = line.split(",");
+        break;
+      }
+    }
+
+    // assemble page 1-4 json using matrix
+    for (int k = 0; k < 4; k++) {
       json.append("[");
       for (int i = 0; i < games[k].length; i++) {
         json.append(games[k][i]);

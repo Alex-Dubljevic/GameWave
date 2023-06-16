@@ -1,5 +1,5 @@
 /*
-Game.java
+ClientJsonDeParser.java
 
 This class parses JSON data for the client.
 
@@ -12,13 +12,17 @@ import java.util.Hashtable;
 
 class ClientJsonDeParser {
 
+  /*
+  Method organizing the hastrable
+  @return hastable hastable
+  */
   public static Hashtable<String, String> parse (String JSON){
     
     Hashtable<String, String> hashtable = new Hashtable<>();
     JSON = JSON.replace("{","").replace("\"", "");
     String[] JSONObjArr = JSON.split(","); // splits values in array based off of commas in values
     String[] currentLine; //array reading current line
-    
+    //splits based off of json rate
     for (int i = 0; i < JSONObjArr.length;i++) {
       currentLine = JSONObjArr[i].split(":");
       hashtable.put(currentLine[0], currentLine[1]);
@@ -26,4 +30,4 @@ class ClientJsonDeParser {
     
     return hashtable;
   }
-}
+} // end of ClientJsonDeParser.java class

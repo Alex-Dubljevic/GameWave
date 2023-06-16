@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +24,11 @@ public class UserPreferenceSurvey extends JFrame implements ActionListener {
     private Color backgroundColor = new Color(65,81,128);
     private Color backgroundColor2 = new Color(65,90,180);
     private Color backgroundColor3 = new Color(21,34,56);
+    private String username;
 
 
     //Opens main gui fro the survey
-    public UserPreferenceSurvey() {
+    public UserPreferenceSurvey(String username) {
         setTitle("User Preference Survey");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -84,6 +86,13 @@ public class UserPreferenceSurvey extends JFrame implements ActionListener {
                 // Save the preferred genres as a string array
                 String[] preferredGenresArray = preferredGenres.toArray(new String[0]);
                 System.out.println("Preferred Genres: " + String.join(", ", preferredGenresArray));
+              
+               try {
+                GameRecommendationSystem recommend = new GameRecommendationSystem();
+                recommend.recommend(preferredGenresArray);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
                 //Opens the login
                 LoginGUI login = new LoginGUI();
                 dispose(); // Close the survey window

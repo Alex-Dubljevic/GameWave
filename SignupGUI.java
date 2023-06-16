@@ -160,6 +160,7 @@ public class SignupGUI extends JFrame implements ActionListener {
     */
     public void actionPerformed(ActionEvent e){
 
+      //string storing username, first pw, and pwconfirmation data to be references with data
       String username = usernameField.getText();
       String password = new String(passwordField.getPassword());
       String passwordConfirm = new String(confirmPasswordField.getPassword());
@@ -169,14 +170,17 @@ public class SignupGUI extends JFrame implements ActionListener {
         
         //registers with the server
         try {
+            //sets up conncection w/ the server
             URL url = new URL("http://0.0.0.0:80/signup");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setDoOutput(true);
 
+            //data storing inputted username and password to be registered into data
             String data = "username=" + URLEncoder.encode(username, "UTF-8")
                     + "&password=" + URLEncoder.encode(password, "UTF-8");
 
+            //inputs data into the database
             OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
             wr.write(data);
             wr.flush();
@@ -186,7 +190,7 @@ public class SignupGUI extends JFrame implements ActionListener {
             if (con.getHeaderField("validity").equals("1")) {
                 dispose(); // Close login window
                 
-                UserPreferenceSurvey login = new UserPreferenceSurvey();
+                UserPreferenceSurvey login = new UserPreferenceSurvey(username);
                 login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 
                 login.setVisible(true);
@@ -194,11 +198,11 @@ public class SignupGUI extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(panel, "Username or Password Invalid");
               System.out.println(con.getResponseMessage());
             }
-
+        //catches erros
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    } else {
+    } else { //invokes error display
                 JOptionPane.showMessageDialog(panel, "Username or Password Invalid");
     }
   }

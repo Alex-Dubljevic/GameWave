@@ -19,10 +19,15 @@ import com.sun.net.httpserver.*;
 import java.util.logging.*;
 import java.util.UUID;
 import java.util.HashMap;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class Server {
   private static final Logger logger = Logger.getLogger(Main.class.getName()); // start logger service
-  private static final HashMap<String, String> sessionData = new HashMap<>(); // start sessionData hashmap which manages logged in users
+  private static final HashMap<String, String> sessionData = new HashMap<>(); // start sessionData hashmap which manages
+                                                                              // logged in users
   static pgordr pgordr = new pgordr(); //
   // initialize page order manager, this manager calulates the page order for
   // different users
@@ -35,26 +40,30 @@ public class Server {
 
     // create request handler for all endpoints
 
-    // endpoint for logging in 
+    // endpoint for logging in
     server.createContext("/login", new RequestHandler());
 
     // endpoint for dashboard (content delivery)
     server.createContext("/dashboard", new RequestHandler());
 
-    // endpoint for signing up 
+    // endpoint for signing up
     server.createContext("/signup", new RequestHandler());
 
-    // endpoint for initialization (tells the client the corresponding name for each ID)
+    // endpoint for initialization (tells the client the corresponding name for each
+    // ID)
     server.createContext("/init", new RequestHandler());
 
     // endpoint for page order (tells the client how to order the dashabord)
     server.createContext("/pgordr", new RequestHandler());
 
-    // endpoint to capture survey data 
+    // endpoint to capture survey data
     server.createContext("/survey", new RequestHandler());
 
     // endpoint to capture reviews
     server.createContext("/reviews", new RequestHandler());
+
+    // endpoint to capture and store survey data
+    server.createContext("/survey", new RequestHandler());
 
     // create service executor
     ExecutorService executor = Executors.newFixedThreadPool(10);
@@ -279,12 +288,12 @@ public class Server {
             logger.info(ip + " attempting GET on /pgordr");
             String sessionId = exchange.getRequestHeaders().getFirst("Session-ID");
             String username = exchange.getRequestHeaders().getFirst("Username");
-            if (true /*sessionData.containsKey(sessionId) && sessionData.get(sessionId).equals(username)*/) {
+            if (sessionData.containsKey(sessionId) && sessionData.get(sessionId).equals(username)) {
               headers.set("Content-Type", "application/json");
               // request succesful
               
                try {
-                response = pgordr.generate(username, "featured.csv", "Games.csv"); // generate page order for user
+                response = pgordr.generate(username, "featured.csv", "Games.csv", "Recommendations.csv"); // generate page order for user
                } catch (Exception e) {
                 logger.info("Page could not be generated: " + String.valueOf(e));
                 response = "Page generation error";
@@ -317,14 +326,35 @@ public class Server {
             responseBody.close();
           }
           break;
-        case "/survey":
+        case "/reviews":
           if ("POST".equals(exchange.getRequestMethod())) {
-            logger.info(ip + " attempting POST on /survey");
-            String username = exchange.getRequestHeaders().getFirst("Username");
-            String[] genres = exchange.getRequestHeaders().getFirst("Genres").split(";");
+            logger.info(ip + " attempted POST method on /reviews");
+            String game = exchange.getRequestHeaders().getFirst("Game");
+            String rating = exchange.getRequestHeaders().getFirst("Rating"); 
+            BufferedReader reader = new BufferedReader(new FileReader(new File("Recommendations.csv")));
+            StringBuilder content = new StringBuilder();
+            String line;
+            boolean gameFound = false;
+            while ((line = reader.readLine()) != null) {
+                String[] elements = line.split(",");
+                if (elements.length > 0 && elements[0].equals(game)) {
+                    line = line + "," + rating;
+                    gameFound = true;
+                }
+                content.append(line).append(System.lineSeparator());
+            }
+            System.out.println(String.valueOf(content));
+            reader.close();
+            response = "Success\n";
+            OutputStream responseBody = exchange.getResponseBody();
+            exchange.sendResponseHeaders(200, response.length());
+            responseBody.write(response.getBytes());
+            responseBody.flush();
+            logger.info("Response sent to " + ip);
+            responseBody.close();    
           } else {
             // method not supported
-            logger.info(ip + " attempted illegal method on /pgordr");
+            logger.info(ip + " attempted illegal method on /reviews");
             OutputStream responseBody = exchange.getResponseBody();
             response = "Method not supported\n"; // send back method not supported
             exchange.sendResponseHeaders(200, response.length()); // 200 OK
@@ -333,17 +363,41 @@ public class Server {
             logger.info("Method not supported sent to " + ip);
             responseBody.close();
           }
-        case "/reviews":
+          break;
+        case "/survey":
           if ("POST".equals(exchange.getRequestMethod())) {
-            String username = exchange.getRequestHeaders().getFirst("Username");
-            String review = exchange.getRequestHeaders().getFirst("Review");
-            String rating = exchange.getRequestHeaders().getFirst("Rating");
-
-            
-            
-          } else {
-            // method not supported
-          }
+             String requestBody = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), "utf-8"))
+                .readLine();
+            String username = null;
+            String data = null;
+            Pattern pattern = Pattern.compile("username=(.*)&data=(.*)");
+            Matcher matcher = pattern.matcher(requestBody);
+            if (matcher.matches()) {
+              username = matcher.group(1);
+              data = matcher.group(2);
+              logger.info("Survey data received from " + ip + "username:" + username + ";data:" + data);
+            }
+            String decodedData =  URLDecoder.decode(data, StandardCharsets.UTF_8.name());
+            String encodedData = Base64.getEncoder().encodeToString(decodedData.getBytes());
+            String database = "Recommendations.csv";
+            FileWriter fw = new FileWriter(database, true); // create filewriter
+            BufferedWriter bw = new BufferedWriter(fw); // create bufferedwriter
+            String newLine = username + "," + encodedData;
+            bw.write(newLine);
+            bw.newLine();       
+            bw.close();
+            fw.close();
+      } else {
+            // illegal method
+            logger.info(ip + " attempted illegal method on /survey");
+            OutputStream responseBody = exchange.getResponseBody();
+            response = "Method not supported\n"; // send back method not supported
+            exchange.sendResponseHeaders(200, response.length()); // 200 OK
+            responseBody.write(response.getBytes());
+            responseBody.flush();
+            logger.info("Method not supported sent to " + ip);
+            responseBody.close();
+        }
       }
     }
   }
