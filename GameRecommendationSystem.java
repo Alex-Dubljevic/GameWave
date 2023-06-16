@@ -6,6 +6,7 @@
   Date Created: Feb. 22, 2023
   Date Modified: June 8, 2023
 
+  Made by Alex D
 */
 
 //import necessary external classes
@@ -36,10 +37,11 @@ public class GameRecommendationSystem{
           gameGenres.put(currentGame.getTitle(), currentGame.getGenres());
         }
         gameReader.close();
-        // Add more games and their genres...
-
+        
+        //List that contains all of the users preferred genres
         List<String> userGenres = new ArrayList<>(Arrays.asList(myGenres));
 
+        //Iterates over all games and the user's genres to compare them for matches
         Map<String, Integer> gameScores = new HashMap<>();
         for (String genre : userGenres) {
             for (Map.Entry<String, List<String>> entry : gameGenres.entrySet()) {
@@ -51,9 +53,11 @@ public class GameRecommendationSystem{
             }
         }
 
+        //Sorts the list of games by the most matching ones
         List<Map.Entry<String, Integer>> sortedGames = new ArrayList<>(gameScores.entrySet());
         Collections.sort(sortedGames, (a, b) -> b.getValue().compareTo(a.getValue()));
 
+        //puts the 16 most related games into an array to send out to the server
         List<String> recommendedGames = new ArrayList<>();
         for (int i = 0; i < Math.min(sortedGames.size(), 16); i++) {
             recommendedGames.add(sortedGames.get(i).getKey());
@@ -74,9 +78,8 @@ public class GameRecommendationSystem{
         byte[] bytes = joinedArray.getBytes(StandardCharsets.UTF_8); // Convert the string to bytes
         String data = Base64.getEncoder().encodeToString(bytes); // Encode the bytes to base64
 
-        
+        //Contates the survey endpoint and sends the username and encoded data to be saved
       try {
-        System.out.println("test1234");
         String url = "http://0.0.0.0:80/survey";
         String requestBody = "username=" + username + "&data=" + data;
 
@@ -105,7 +108,6 @@ public class GameRecommendationSystem{
     } catch (Exception e) {
         e.printStackTrace();
         throw e;
-    }
-    
-    }
+    } 
+  }
 }

@@ -7,6 +7,7 @@
   Date Created: Feb. 22, 2023
   Date Modified: June 8, 2023
 
+  Made by Alex D
 */
 
 import javax.swing.*;
@@ -30,12 +31,16 @@ public class GameInfoPage extends JFrame {
     private JSlider ratingSlider;
     private Color backgroundColor3 = new Color(21,34,56);
 
+    /*
+    This method opens the game info for each game when it needs to be opened
+    */
     public GameInfoPage(String title, Icon image, String description, String rating, String genres, String username) {
         setTitle("Game Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setUndecorated(true);
 
+        //Sets the properties for the main panel
         contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(new Color(65, 90, 180));
         contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));

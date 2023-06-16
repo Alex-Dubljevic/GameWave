@@ -7,6 +7,7 @@
   Date Created: Feb. 22, 2023
   Date Modified: June 8, 2023
 
+  Made by Alex D
 */
 
 import javax.swing.*;
@@ -207,7 +208,6 @@ public class HomepageGUI extends JFrame implements ActionListener {
 
         page2Button = new JButton("Featured Games");
         page2Button.setBackground(backgroundColor3);
-        page2Button.setFocusPainted(false);
         page2Button.setForeground(Color.WHITE);
         page2Button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
