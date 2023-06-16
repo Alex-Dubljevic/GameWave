@@ -218,5 +218,25 @@ public class Game {
     return "{\"game\": \"" + this.title + "\", \"genre\": \"" + String.valueOf(this.genres) + "\", \"rating\": \"" + String.valueOf(this.rating) + "\", \"image\": \"" + image + "\", \"description\": \"" + description + "\"}";
 
   }
+
+  public static String titleToID(String myTitle) throws FileNotFoundException {
+    File gameFile1 = new File("Games.csv"); //initializes csv file
+    Scanner gameReader2 = new Scanner(gameFile1); //initializes scanner
+    String gameInfoMerged = "";
+    String myID = "";
+    boolean validTitle = false;
+    gameReader2.nextLine();
+    while (gameReader2.hasNext() && validTitle == false){ //while loop that reads game info
+    gameInfoMerged = gameReader2.nextLine();
+      String[] findID = gameInfoMerged.split(",");
+      String checkTitle = findID[0];
+      if (myTitle.equals(checkTitle)){
+        validTitle = true;
+        myID = findID[3];
+      }  
+    }
+    gameReader2.close();
+    return myID;
+  }
   
 }

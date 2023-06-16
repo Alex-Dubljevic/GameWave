@@ -34,6 +34,7 @@ public class UserPreferenceSurvey extends JFrame implements ActionListener {
         setSize(800, 600);
         setUndecorated(true);
         setLayout(new BorderLayout());
+        this.username = username;
 
         // Title label
         JLabel titleLabel = new JLabel("Help us Recommend You Games by Selecting at Least 5 Genres You Like!");
@@ -89,13 +90,16 @@ public class UserPreferenceSurvey extends JFrame implements ActionListener {
               
                try {
                 GameRecommendationSystem recommend = new GameRecommendationSystem();
-                recommend.recommend(preferredGenresArray);
+                  // Close the survey window
+                recommend.recommend(preferredGenresArray, username);
+                //Opens the login
+                 dispose();
+                LoginGUI login = new LoginGUI();
+                 
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-                //Opens the login
-                LoginGUI login = new LoginGUI();
-                dispose(); // Close the survey window
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Please select at least 5 genres.");
             }

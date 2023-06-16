@@ -1,3 +1,14 @@
+/**
+
+  GameInfoPage.java
+  This class designs the main GUI for the game information page.
+
+  Programmed by: Alex D., Aleks G., Maksim G., Kaan  U., and Ilya R.
+  Date Created: Feb. 22, 2023
+  Date Modified: June 8, 2023
+
+*/
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

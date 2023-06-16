@@ -331,6 +331,8 @@ public class Server {
             logger.info(ip + " attempted POST method on /reviews");
             String game = exchange.getRequestHeaders().getFirst("Game");
             String rating = exchange.getRequestHeaders().getFirst("Rating"); 
+            String myID = Game.titleToID(game);
+            int myRating = Integer.valueOf(rating);           
             BufferedReader reader = new BufferedReader(new FileReader(new File("Recommendations.csv")));
             StringBuilder content = new StringBuilder();
             String line;
@@ -345,6 +347,7 @@ public class Server {
             }
             System.out.println(String.valueOf(content));
             reader.close();
+            
             response = "Success\n";
             OutputStream responseBody = exchange.getResponseBody();
             exchange.sendResponseHeaders(200, response.length());
@@ -378,15 +381,23 @@ public class Server {
               logger.info("Survey data received from " + ip + "username:" + username + ";data:" + data);
             }
             String decodedData =  URLDecoder.decode(data, StandardCharsets.UTF_8.name());
-            String encodedData = Base64.getEncoder().encodeToString(decodedData.getBytes());
+            
+            //String encodedData = Base64.getEncoder().encodeToString(decodedData.getBytes());
             String database = "Recommendations.csv";
             FileWriter fw = new FileWriter(database, true); // create filewriter
             BufferedWriter bw = new BufferedWriter(fw); // create bufferedwriter
-            String newLine = username + "," + encodedData;
+            String newLine = username + "," + decodedData;
             bw.write(newLine);
             bw.newLine();       
             bw.close();
             fw.close();
+            response = "Success\n";
+            OutputStream responseBody = exchange.getResponseBody();
+            exchange.sendResponseHeaders(200, response.length());
+            responseBody.write(response.getBytes());
+            responseBody.flush();
+            logger.info("Response sent to " + ip);
+            responseBody.close();   
       } else {
             // illegal method
             logger.info(ip + " attempted illegal method on /survey");

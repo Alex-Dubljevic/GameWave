@@ -174,11 +174,15 @@ public class HomepageGUI extends JFrame implements ActionListener {
         JPanel tablePanel4 = new JPanel(new GridLayout(4, 4));
         tablePanel4.setBackground(backgroundColor);
         for (int i = 0; i < 16; i++) {
-            JButton button = new JButton("Game " + (i + 49));
+          
+            int index = i;
+            JButton button = new JButton(imageFromID(pageOrder[3][i], sessionID, username));
             button.setBackground(backgroundColor);
             button.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
-                    //logic when button is pressed
+                  String[] gameInfo = getGameInfo(pageOrder[3][index], sessionID, username);
+                    GameInfoPage game = new GameInfoPage(gameInfo[0], imageFromID(pageOrder[3][index], sessionID, username), gameInfo[3], gameInfo[2], gameInfo[1], username);
+                    game.setVisible(true);
                 }
             });
             tablePanel4.add(button);
@@ -203,6 +207,7 @@ public class HomepageGUI extends JFrame implements ActionListener {
 
         page2Button = new JButton("Featured Games");
         page2Button.setBackground(backgroundColor3);
+        page2Button.setFocusPainted(false);
         page2Button.setForeground(Color.WHITE);
         page2Button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){

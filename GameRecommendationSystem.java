@@ -11,6 +11,10 @@
 //import necessary external classes
 import java.util.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.net.*;
 
 public class GameRecommendationSystem{
 
@@ -55,11 +59,53 @@ public class GameRecommendationSystem{
             recommendedGames.add(sortedGames.get(i).getKey());
         }
 
+       for (int i = 0; i < recommendedGames.size(); i++) {
+          String title = recommendedGames.get(i);
+          String id = Game.titleToID(title);
+          recommendedGames.set(i, id);
+       }
+
         // Print the recommended games
         for (String game : recommendedGames) {
             System.out.println(game);
         }
 
+        String joinedArray = String.join(",", recommendedGames); // Join the strings with a delimiter
+        byte[] bytes = joinedArray.getBytes(StandardCharsets.UTF_8); // Convert the string to bytes
+        String data = Base64.getEncoder().encodeToString(bytes); // Encode the bytes to base64
+
         
+      try {
+        System.out.println("test1234");
+        String url = "http://0.0.0.0:80/survey";
+        String requestBody = "username=" + username + "&data=" + data;
+
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        
+        // Set the request method to POST
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        // Write the request body to the output stream
+        
+        try (OutputStream os = con.getOutputStream()) {
+            byte[] input = requestBody.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);   
+        }  catch (Exception e) {
+        e.printStackTrace();
+        }
+
+        // Get the response
+        int responseCode = con.getResponseCode();
+        System.out.println("Response Code: " + responseCode);
+        
+        // Handle the response as needed
+        
+        con.disconnect();
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw e;
+    }
+    
     }
 }

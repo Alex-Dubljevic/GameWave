@@ -22,7 +22,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 1L;
     private JPanel panel;
-    private JLabel usernameLabel, passwordLabel, titleLabel, imageLabel;
+    private JLabel usernameLabel, passwordLabel, titleLabel, imageLabel, helpLabel;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
@@ -110,6 +110,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 
         //organizes gui for login button
         loginButton = new JButton("Login");
+        loginButton.setFocusPainted(false);
         loginButton.setFont(font);
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -128,6 +129,15 @@ public class LoginGUI extends JFrame implements ActionListener {
         signupButton.addActionListener(this);
         panel.add(signupButton, gbc);
         signupButton.setBackground(backgroundColor2);
+
+        //help label
+        helpLabel = new JLabel("Need Help? Go to linktr.ee/gamewave");
+        helpLabel.setFont(font);
+        helpLabel.setForeground(Color.WHITE);
+        helpLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridy = 5;
+        gbc.insets = new Insets(10, 0, 0, 0);
+        panel.add(helpLabel, gbc);
 
         //adds panel and makes gui visible
         add(panel);
