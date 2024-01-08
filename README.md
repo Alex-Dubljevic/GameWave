@@ -2,3 +2,5 @@ To run this program, open the link to the repl.it repository and fork the projec
 
 Link: https://replit.com/@AlexDubljevic/GamewaveFinalVersion
 
+Documentation and how to use the app: https://linktr.ee/gamewave
+
