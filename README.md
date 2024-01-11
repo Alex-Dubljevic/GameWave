@@ -7,7 +7,12 @@ Link: https://replit.com/@AlexDubljevic/GamewaveFinalVersion
 
 ## What is GameWave?
 
-GameWave is a project that I created for a computer science class and it is a mock video game marketplace where users can signup, login, get recommended games, and leave reviews. The project makes use of a Java Swing frontend, and a localhost server backend completely in Java. I coded the entire frontend of the application, the recommendation algorithm, and some of the server endpoints including proper HTTP request processing. One team member helped make the rest of the server while others contributed through data entry and writing descriptions/making images.
+GameWave is a project that I created for a computer science class and it is a mock video game marketplace where users can signup, login, get recommended games, and leave reviews. The project makes use of a Java Swing frontend, and a localhost server backend completely in Java. I coded the entire frontend of the application, the recommendation algorithm using content-based filtering, and some of the server endpoints including proper HTTP request processing. One team member helped make the rest of the server and some of the classes while others contributed through data entry and writing descriptions/making images. All in all, there are over 15 fully documented classes that each play an important part in making the application work.
+
+Some of the most difficult challenges I had to solve while making this application include:
+* Figuring out how to encode, send and decode images over the server using HTTP requests and Base64
+* Creating a proper layout with consistent UI components for each page that was visually appealing 
+* Learning how to create/use a content-based filtering algorithm along with various sorting algorithms
 
 ## Documentation and Example Photos
 
